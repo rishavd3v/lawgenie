@@ -1,4 +1,4 @@
-import { Github } from "lucide-react";
+import { Github, UserRound } from "lucide-react";
 import Container from "../components/Container";
 import HighlightText from "../components/HighlightText";
 import {useNavigate } from "react-router-dom";
@@ -46,17 +46,20 @@ export default function SignIn(){
                         <Github size={20}/>
                         <p>Sign In with GitHub</p>
                     </Button>
+                    <Divider/>
+                    <Button disabled={true}  className={"text-white hover:bg-gray-700"} onClick={handleGithubSignIn}>
+                        <UserRound size={20}/>
+                        <p>Continue as Guest</p>
+                    </Button>
                 </div>
-                <Divider/>
-
             </Container>
         </div>
     )
 }
 
-function Button({children, className, onClick}) {
+function Button({disabled, children, className, onClick}) {
     return (
-        <button className={`flex justify-center items-center gap-4 px-4 py-2 w-full bg-gray-800  font-medium rounded-lg transition-all duration-200 transform hover:scale-[1.02] border border-gray-700 cursor-pointer ${className}`} onClick={onClick}>
+        <button className={`flex justify-center items-center gap-4 px-4 py-2 w-full bg-gray-800  font-medium rounded-lg transition-all duration-200 transform hover:scale-[1.02] border border-gray-700 cursor-pointer disabled:opacity-50 disabled:pointer-events-none ${className}`} onClick={onClick} disabled={disabled}>
             {children}
         </button>
     );
