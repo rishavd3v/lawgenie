@@ -15,7 +15,7 @@ function App() {
       <div className='px-30'>
         <Routes>
           <Route path="/" element={<Landing/>}/>
-          <Route path="/home" element={<Home/>}/>
+          <Route path="/home" element={<ProtectedRoute><Home/></ProtectedRoute>}/>
           <Route path="/signin" element={<SignIn/>}/>
           <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
         </Routes>
