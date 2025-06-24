@@ -1,5 +1,5 @@
 export default function Container({ children, className="w-full" }) {
     return(
-        <div className={`flex flex-col gap-8 justify-center items-center p-8 bg-gray-800/30 rounded-md border border-gray-800 ${className}`}>{children}</div>
+        <div className={`flex flex-col gap-8 items-center px-8 py-4 bg-gray-800/30 rounded-md border border-gray-800 max-h-3/4 overflow-auto scrollbar-hide ${className}`}>{children}</div>
     )
 }
