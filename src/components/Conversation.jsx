@@ -1,0 +1,87 @@
+import { useEffect, useRef, useState } from "react";
+import Container from "./Container";
+import { Send, SquarePen } from "lucide-react";
+import axios from "axios";
+import ReactMarkdown  from "react-markdown";
+export default function Conversation({setQuestion,setShowConversation,selectedCountry,conversation,setConversation,history, setHistory}) {
+    const [followUp, setFollowUp] = useState("");
+    const [loading, setLoading] = useState(false);
+    const bottonRef = useRef(null);
+
+    useEffect(() => { 
+        if (bottonRef.current) {
+            bottonRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [conversation]);
+
+    const resetConversation=()=>{
+        setConversation([]);
+        setQuestion('');
+        setFollowUp('');
+        setHistory([]);
+        setShowConversation(false);
+    }
+
+    const handleFollowUp = async (e) => {
+        if(e && e.key !== 'Enter') return;
+        if (!followUp.trim()) return;
+        setConversation(prev => [...prev, {role: 'user', content: followUp, timestamp: new Date().toLocaleTimeString()}]);
+        setFollowUp('');
+        setLoading(true);
+        try {
+            const response = await axios.post('http://localhost:3000/api/chat', {
+                message: followUp,
+                history: history
+            });
+            setConversation(prev => [...prev, {role: 'model', content: response.data.text, timestamp: new Date().toLocaleTimeString()}]);
+            setHistory(response.data.history);
+        }
+        catch(error) {
+            console.error("Error fetching data:", error);
+            alert("An error occurred while fetching data. Please try again later.");
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+    return(
+        <div className='h-[90vh] flex flex-col gap-4 items-center justify-center'>
+            <Container>
+                <div className='w-full flex justify-between'>
+                    <div className='font-medium'>Legal Analysis - {selectedCountry}</div>
+                    <button onClick={resetConversation} className='flex gap-2 items-center text-sm hover:bg-white hover:text-background px-2 py-2 rounded-md cursor-pointer bg-gray-800 border border-gray-600 text-white transition-all duration-200'><SquarePen size={16}/>New Chat</button>
+                </div>
+                <div className='w-full flex flex-col gap-10 text-sm'>
+                    {conversation?.map((msg, index) => {
+                        const isLast = index === conversation.length - 1;
+                        return(
+                            <div key={index} ref={isLast?bottonRef:null} className={`flex ${msg.role=='user'?"justify-end":"justify-start"}`}>
+                                <div className={`max-w-[70%] flex flex-col gap-1 p-3 rounded-lg ${msg.role === 'user'?'bg-green-600 text-white':'bg-gray-800 text-gray-100 border border-gray-700'} `}>
+                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                    <p className="text-xs text-gray-300">{msg.timestamp}</p>
+                                </div>
+                            </div>
+                        )
+                    })}
+
+                    {loading && (
+                        <div className="flex justify-start">
+                            <div className="bg-gray-800 border border-gray-700 p-3 rounded-lg">
+                                <div className="flex items-center gap-2">
+                                <div className="animate-spin rounded-full h-4 w-4 border-2 border-green-500 border-t-transparent" />
+                                <span className="text-gray-300 text-sm">AI is thinking...</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <div ref={bottonRef}/>
+                </div>
+            </Container>
+
+            <div className='w-full flex items-center gap-2'>
+                <input className='w-full h-full px-2 py-3 rounded-md focus:outline-none bg-gray-800 border-gray-700 text-white text-sm disabled:pointer-events-none' type="text" placeholder='Ask a follow-up question...' value={followUp} disabled={loading} onChange={(e)=>setFollowUp(e.target.value)} onKeyDown={handleFollowUp}/>
+                <button onClick={handleFollowUp} className={`flex justify-center items-center h-full bg-green-600 p-3 rounded-md hover:bg-green-700 cursor-pointer disabled:pointer-events-none disabled:opacity-50`} disabled={loading || !followUp.trim()}><Send size={15}/></button>
+            </div>
+        </div>
+    )
+}
