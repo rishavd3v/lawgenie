@@ -14,6 +14,7 @@ export default function Home() {
     const [loading, setLoading] = useState(false);
     const [conversation, setConversation] = useState([]);
     const [history, setHistory] = useState([]);
+    const [conversationId, setConversationId] = useState(null);
     const createChat = useCreateChat();
 
     const handleSubmit = async () => {
@@ -26,11 +27,13 @@ export default function Home() {
         try{
             const response = await createChat(question,selectedCountry);
             setConversation(prev=>[...prev, {role: 'model', content: response.text, timestamp: new Date().toLocaleTimeString()}]);
+            setConversationId(response.conversationId);
             setHistory(response.history);
             setShowConversation(true);
 
         }
         catch(error) {
+            setQuestion("");
             console.error("Error fetching data:", error);
             alert("An error occurred while fetching data. Please try again later.");
         }
@@ -41,7 +44,7 @@ export default function Home() {
     };
 
     if(showConversation){
-        return <Conversation setQuestion={setQuestion} setShowConversation={setShowConversation} selectedCountry={selectedCountry} conversation={conversation} setConversation={setConversation} history={history} setHistory={setHistory}/>
+        return <Conversation setQuestion={setQuestion} setShowConversation={setShowConversation} selectedCountry={selectedCountry} conversation={conversation} setConversation={setConversation} history={history} setHistory={setHistory} conversationId={conversationId} setConversationId={setConversationId}/>
     }
 
     return(

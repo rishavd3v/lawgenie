@@ -4,7 +4,7 @@ import { Send, SquarePen } from "lucide-react";
 import axios from "axios";
 import ReactMarkdown  from "react-markdown";
 import { useCreateChat } from "../utils/fetch";
-export default function Conversation({setQuestion,setShowConversation,selectedCountry,conversation,setConversation,history, setHistory}) {
+export default function Conversation({setQuestion,setShowConversation,selectedCountry,conversation,setConversation,history, setHistory, setConversationId, conversationId}) {
     const [followUp, setFollowUp] = useState("");
     const [loading, setLoading] = useState(false);
     const bottonRef = useRef(null);
@@ -21,6 +21,7 @@ export default function Conversation({setQuestion,setShowConversation,selectedCo
         setQuestion('');
         setFollowUp('');
         setHistory([]);
+        setConversationId(null);
         setShowConversation(false);
     }
 
@@ -31,7 +32,7 @@ export default function Conversation({setQuestion,setShowConversation,selectedCo
         setFollowUp('');
         setLoading(true);
         try {
-            const response = await createChat(followUp,selectedCountry, history);
+            const response = await createChat(followUp,selectedCountry, history, conversationId);
             setConversation(prev => [...prev, {role: 'model', content: response.text, timestamp: new Date().toLocaleTimeString()}]);
             setHistory(response.history);
         }
