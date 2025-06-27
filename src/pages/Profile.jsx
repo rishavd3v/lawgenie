@@ -27,9 +27,10 @@ export default function Profile(){
         <div className="flex justify-center mt-20 text-primary">
             {/* Account Section  */}
             <div className="flex flex-col gap-10 md:w-1/2 md:p-4 p-2 px-4">
-                <div className="">
+                <div>
                     <SettingCard>
                         <CardTitle>My Account</CardTitle>
+                        <Divider/>
                         <ProfileSection name={user.displayName} email={user.email}/>
 
                         <CardContent>
@@ -47,7 +48,7 @@ export default function Profile(){
                 <div>
                     <SettingCard>
                         <CardTitle>System</CardTitle>
-
+                        <Divider/>
                         <ButtonCard>
                             <CardContentTitle>You are currently logged in as {user.displayName}</CardContentTitle>
                             <CardButton onclick={()=>handlePopup(handleLogout,"Are you sure you want to Logout?")} className={"bg-neutral-700 text-zinc-50 border-none"}>Logout</CardButton>
@@ -67,5 +68,11 @@ export default function Profile(){
             </div>
 
         </div>
+    )
+}
+
+function Divider(){
+    return(
+        <div className="h-[0.5px] bg-gray-700"></div>
     )
 }

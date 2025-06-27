@@ -11,7 +11,7 @@ function CardTitle({children}){
     return(
         <div className="font-medium text-base">
             {children}
-            <div className="h-[0.5px] bg-accent2 w-full mt-4"></div>
+            <div className="h-[0.5px] w-full mt-1"></div>
         </div>
     )
 }
@@ -30,12 +30,12 @@ function ProfileSection({name,email}){
         <div className="flex justify-between items-center">
             <div className="flex gap-2 items-center">
                 <div className="w-10"><Avatar/></div>
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-1">
                     <div className="text-sm font-medium">{name}</div>
-                    <div className="text-xs text-accent">{email}</div>
+                    <div className="text-xs text-accent font-mono text-gray-400">{email}</div>
                 </div>
             </div>
-            <CardButton className={"hover:text-primary hover:opacity-100"}>Change Avatar</CardButton>
+            <CardButton disabled={true} className={"hover:text-primary hover:opacity-100"}>Change Avatar</CardButton>
         </div>
     )
 }
@@ -58,22 +58,22 @@ function ButtonCard({children}){
 
 function CardContentTitle({children}){
     return(
-        <div className="text-sm">
+        <div className="text-base">
             {children}
         </div>
     )
 }
 function CardContentSubtitle({children}){
     return(
-        <div className="text-sm text-accent">
+        <div className="text-sm font-mono text-gray-400">
             {children}
         </div>
     )
 }
-function CardButton({children,className,onclick}){
+function CardButton({children,className,onclick, disabled}){
     return(
-        <div className={`p-2 rounded-lg border border-accent2 text-accent hover:opacity-80 transition-all ${className}`}>
-            <button className="cursor-pointer" onClick={onclick}>{children}</button>
+        <div className={`p-2 rounded-lg border border-gray-600 text-accent hover:opacity-80 transition-all cursor-pointer ${className} ${disabled?"opacity-50 pointer-events-none":""}`}>
+            <button disabled={disabled} className="cursor-pointer" onClick={onclick}>{children}</button>
         </div>
     )
 }

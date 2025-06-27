@@ -24,7 +24,7 @@ export default function Navbar(){
             <Link to={''} className="flex gap-1 items-center text-2xl font-semibold font-mono"><Scale size={24}/>LawGenie</Link>
             {user && 
                 <div ref={ref} className="relative">
-                    <div className="flex gap-4 items-center text-sm font-semibold">
+                    <div className="flex gap-4 items-center">
                         <button className="cursor-pointer" onClick={()=>setShowDropdown(!showDropdown)}><Avatar size={10}/></button>
                         {showDropdown && <Menu/>}
                     </div>

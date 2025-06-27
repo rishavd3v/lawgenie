@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { ArrowRight, Globe, NotebookPen, Upload } from 'lucide-react';
-import axios from "axios";
 import SelectCountry from '../components/SelectCountry';
 import Container from '../components/Container';
 import Conversation from '../components/Conversation';
+import { useCreateChat } from '../utils/fetch';
 
 export default function Home() {
     const [activeTab, setActiveTab] = useState("question");
@@ -14,6 +14,7 @@ export default function Home() {
     const [loading, setLoading] = useState(false);
     const [conversation, setConversation] = useState([]);
     const [history, setHistory] = useState([]);
+    const createChat = useCreateChat();
 
     const handleSubmit = async () => {
         if (!question) {
@@ -23,11 +24,9 @@ export default function Home() {
         setConversation(prev => [...prev, {role: 'user', content: question, timestamp: new Date().toLocaleTimeString()}]);
         setLoading(true);
         try{
-            const response = await axios.post('http://localhost:3000/api/chat', {
-                message: question
-            });
-            setConversation(prev=>[...prev, {role: 'model', content: response.data.text, timestamp: new Date().toLocaleTimeString()}]);
-            setHistory(response.data.history);
+            const response = await createChat(question,selectedCountry);
+            setConversation(prev=>[...prev, {role: 'model', content: response.text, timestamp: new Date().toLocaleTimeString()}]);
+            setHistory(response.history);
             setShowConversation(true);
 
         }
@@ -50,7 +49,7 @@ export default function Home() {
             <Container>
                 <div className='flex gap-2 justify-start w-full'>
                     <Tab className={`${activeTab=="question"?"bg-green-600":"bg-gray-500 hover:bg-gray-700"}`} onClick={()=>setActiveTab("question")}><NotebookPen size={18}/> Ask Question</Tab>
-                    <Tab  className={`${activeTab=="document"?"bg-green-600":"bg-gray-500 hover:bg-gray-600"}`}><Upload size={18}/> Analyse Document</Tab>
+                    <Tab disabled={true}  className={`${activeTab=="document"?"bg-green-600":"bg-gray-500 hover:bg-gray-600"}`}><Upload size={18}/> Analyse Document</Tab>
                 </div>
                 
                 {activeTab=="question" && (
@@ -81,9 +80,9 @@ export function Textarea({question,setQuestion, loading}){
     )
 }
 
-function Tab({children,onClick,className}) {
+function Tab({children,onClick,className,disabled}) {
     return (
-        <button className={`px-4 py-2 text-sm font-medium rounded-md cursor-pointer transition duration-200 ${className}`} onClick={onClick}>
+        <button className={`px-4 py-2 text-sm font-medium rounded-md cursor-pointer transition duration-200 disabled:opacity-50 disabled:pointer-events-none ${className}`}disabled={disabled} onClick={onClick}>
             <div className='flex gap-2'>{children}</div>
         </button>
     )
