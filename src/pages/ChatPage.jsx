@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useChatStore } from '../store/chatStore';
 import Conversation from '../components/Conversation';
 import { useEffect } from 'react';
-import { useGetMessages } from '../utils/fetch';
+import { useGetMessages } from '../utils/Fetch';
 
 export default function ChatPage() {
   const { conversationId } = useParams();
