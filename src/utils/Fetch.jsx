@@ -11,7 +11,7 @@ export const useCreateChat = () => {
         try{
             const token = await user.getIdToken();
             const res = await axios.post(
-                'http://localhost:3000/api/chat',
+                'http://localhost:3000/generate',
                 { message, country, history, conversationId },
                 {
                     headers: {
