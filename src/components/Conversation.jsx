@@ -3,7 +3,7 @@ import Container from "./Container";
 import { Send, SquarePen } from "lucide-react";
 import axios from "axios";
 import ReactMarkdown  from "react-markdown";
-import { useCreateChat } from "../utils/fetch";
+import { useCreateChat } from "../utils/Fetch";
 import { useNavigate } from "react-router-dom";
 export default function Conversation({selectedCountry,conversation,addMessage, history, setHistory, conversationId,resetChat}) {
     const [followUp, setFollowUp] = useState("");
