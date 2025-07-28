@@ -1,9 +1,10 @@
 import axios from "axios"
 import { useAuth } from "../context/AuthContext";
+const backendURL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
 
 export const useCreateChat = () => {
     const { user } = useAuth();
-
+    console.log(backendURL)
     const createChat = async (message,country,history=[], conversationId) => {
         if(!user) {
             throw new Error("User not authenticated. Please sign in to continue.");
@@ -11,7 +12,7 @@ export const useCreateChat = () => {
         try{
             const token = await user.getIdToken();
             const res = await axios.post(
-                'http://localhost:3000/generate',
+                `${backendURL}/generate`,
                 { message, country, history, conversationId },
                 {
                     headers: {
@@ -40,7 +41,7 @@ export const useGetConversation = () => {
         try{
             const token = await user.getIdToken();
             const res = await axios.get(
-                `http://localhost:3000/chat/recentChat`,
+                `${backendURL}/chat/recentChats`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -67,7 +68,7 @@ export const useDeleteChat = () => {
         try{
             const token = await user.getIdToken();
             const res = await axios.delete(
-                `http://localhost:3000/chat/deleteChat/${id}`,
+                `${backendURL}/chat/deleteChat/${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -92,7 +93,7 @@ export const useGetMessages = () => {
         }
         try{
             const token = await user.getIdToken();
-            const res = await axios.get(`http://localhost:3000/chat/messages/${conversationId}`,{
+            const res = await axios.get(`${backendURL}/chat/messages/${conversationId}`,{
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
