@@ -30,7 +30,7 @@ export default function SignIn(){
         }
     },[])
     return(
-        <div className="h-[80vh] flex flex-col justify-center items-center">
+        <div className="h-screen flex flex-col justify-center items-center">
             <HighlightText className={'mb-10'}>Secured Authentication</HighlightText>
             <Container className={"w-1/3"}>
                 <div className="space-y-2 text-center">
@@ -42,7 +42,7 @@ export default function SignIn(){
                         <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="" />
                         <p>Sign In with Google</p>
                     </Button>
-                    <Button className={"text-white hover:bg-gray-700"}>
+                    <Button disabled={true} className={"text-white hover:bg-gray-700"}>
                         <Github size={20}/>
                         <p>Sign In with GitHub</p>
                     </Button>

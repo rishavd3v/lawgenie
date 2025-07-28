@@ -50,7 +50,7 @@ export default function Profile(){
                         <CardTitle>System</CardTitle>
                         <Divider/>
                         <ButtonCard>
-                            <CardContentTitle>You are currently logged in as {user.displayName}</CardContentTitle>
+                            <CardContentTitle>You are currently logged in as <span className="font-mono">{user.displayName}</span></CardContentTitle>
                             <CardButton onclick={()=>handlePopup(handleLogout,"Are you sure you want to Logout?")} className={"bg-neutral-700 text-zinc-50 border-none"}>Logout</CardButton>
                         </ButtonCard>
 
