@@ -4,55 +4,67 @@ import { Send, SquarePen } from "lucide-react";
 import axios from "axios";
 import ReactMarkdown  from "react-markdown";
 import { useCreateChat } from "../utils/fetch";
-export default function Conversation({setQuestion,setShowConversation,selectedCountry,conversation,setConversation,history, setHistory, setConversationId, conversationId}) {
+import { useNavigate } from "react-router-dom";
+export default function Conversation({selectedCountry,conversation,addMessage, history, setHistory, conversationId,resetChat}) {
     const [followUp, setFollowUp] = useState("");
     const [loading, setLoading] = useState(false);
     const bottonRef = useRef(null);
     const createChat = useCreateChat();
+    const navigate = useNavigate();
 
-    useEffect(() => { 
+    useEffect(() => {
         if (bottonRef.current) {
             bottonRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [conversation]);
 
-    const resetConversation=()=>{
-        setConversation([]);
-        setQuestion('');
-        setFollowUp('');
-        setHistory([]);
-        setConversationId(null);
-        setShowConversation(false);
-    }
-
     const handleFollowUp = async (e) => {
         if(e && e.type === 'keydown' && e.key !== 'Enter') return;
         if (!followUp.trim()) return;
-        setConversation(prev => [...prev, {role: 'user', content: followUp, timestamp: new Date().toLocaleTimeString()}]);
+        addMessage({
+            role: 'user',
+            content: followUp,
+            timestamp: new Date().toLocaleTimeString(),
+        });
         setFollowUp('');
         setLoading(true);
-        try {
+        try{
             const response = await createChat(followUp,selectedCountry, history, conversationId);
-            setConversation(prev => [...prev, {role: 'model', content: response.text, timestamp: new Date().toLocaleTimeString()}]);
+            addMessage({
+                role: 'model',
+                content: response.text,
+                timestamp: new Date().toLocaleTimeString(),
+            })
             setHistory(response.history);
         }
+        
         catch(error) {
             console.error("Error fetching data:", error);
-            setConversation(prev => [...prev, {role: 'model', error: "Error: An error occurred while fetching data. Please try again later."}]);
+            addMessage({
+                role: 'model',
+                error: "Error: An error occurred while fetching data. Please try again later.",
+                timestamp: new Date().toLocaleTimeString(),
+            })
         }
         finally {
             setLoading(false);
         }
     }
+
+    const handleReset=()=>{
+        resetChat();
+        navigate('/home')
+    }
+
     return(
-        <div className='h-[90vh] flex flex-col gap-4 items-center justify-center'>
+        <div className='flex flex-col gap-4 items-center justify-center h-full w-full'>
             <div className='w-full flex justify-between'>
                 <div className='font-medium'>Legal Analysis - {selectedCountry}</div>
-                <button onClick={resetConversation} className='flex gap-2 items-center text-sm hover:bg-white hover:text-background px-2 py-2 rounded-md cursor-pointer bg-gray-800 border border-gray-600 text-white transition-all duration-200'><SquarePen size={16}/>New Chat</button>
+                <button onClick={handleReset} className='flex gap-2 items-center text-sm hover:bg-white hover:text-background px-2 py-2 rounded-md cursor-pointer bg-gray-800 border border-gray-600 text-white transition-all duration-200'><SquarePen size={16}/>New Chat</button>
             </div>
             <Container>
                 <div className='w-full flex flex-col gap-10 text-sm'>
-                    {conversation?.map((msg, index) => {
+                    {conversation.map((msg, index) => {
                         const isLast = index === conversation.length - 1;
                         return(
                             <div key={index} ref={isLast?bottonRef:null} className={`flex ${msg.role=='user'?"justify-end":"justify-start"}`}>
