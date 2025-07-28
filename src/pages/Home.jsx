@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { ArrowRight, Globe, Menu, NotebookPen, Upload } from 'lucide-react';
 import SelectCountry from '../components/SelectCountry';
 import Container from '../components/Container';
-import { useCreateChat } from '../utils/fetch';
 import Grid from '../components/ui/Grid';
 import Sidebar from '../components/Sidebar';
 import { useChatStore } from '../store/chatStore';
 import { useNavigate } from 'react-router-dom';
+import { useCreateChat } from '../utils/fetch';
 
 export default function Home() {
     const {question,setQuestion, selectedCountry, setSelectedCountry,setHistory,setConversation,setConversationId, addMessage} = useChatStore();
