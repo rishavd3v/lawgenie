@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDeleteChat, useGetConversation } from "../utils/fetch";
+import { useDeleteChat, useGetConversation } from "../utils/Fetch";
 import { PanelLeftClose, Scale, Trash } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useChatStore } from "../store/chatStore";

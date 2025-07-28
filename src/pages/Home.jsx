@@ -6,7 +6,7 @@ import Grid from '../components/ui/Grid';
 import Sidebar from '../components/Sidebar';
 import { useChatStore } from '../store/chatStore';
 import { useNavigate } from 'react-router-dom';
-import { useCreateChat } from '../utils/fetch';
+import { useCreateChat } from '../utils/Fetch';
 
 export default function Home() {
     const {question,setQuestion, selectedCountry, setSelectedCountry,setHistory,setConversation,setConversationId, addMessage} = useChatStore();

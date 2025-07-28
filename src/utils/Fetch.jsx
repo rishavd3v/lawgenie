@@ -40,7 +40,7 @@ export const useGetConversation = () => {
         try{
             const token = await user.getIdToken();
             const res = await axios.get(
-                `http://localhost:3000/chat/recentChats`,
+                `http://localhost:3000/chat/recentChat`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
